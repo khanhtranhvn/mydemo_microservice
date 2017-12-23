@@ -10,10 +10,7 @@
 | is ready to receive HTTP / Console requests from the environment.
 |
 */
-
-use Illuminate\Http\Request;
-use App\User;
-
+use Illuminate\Support\Facades\DB;
 $app = require __DIR__.'/../bootstrap/app.php';
 
 /*
@@ -27,38 +24,9 @@ $app = require __DIR__.'/../bootstrap/app.php';
 | and wonderful application we have prepared for them.
 |
 */
-
-//class User extends \Illuminate\Database\Eloquent\Model {
-//    protected $table = 'user_service';
+//if (DB::connection()->getDatabaseName())
+//{
+//    return 'Connected to the DB: ' . DB::connection()->getDatabaseName();
 //}
-
-$app->get('user', function() {
-    var_dump(User::all());exit;
-});
-
-$app->get('user/{id}', function($id) {
-    return response()->json(User::find($id));
-});
-
-$app->post('user', function(Request $request) {
-    $user = new User();
-    $user->email = $request->input('email');
-
-    $user->save();
-    return response()->json($user, 201);
-});
-
-$app->delete('user/{id}', function($id) {
-    Dev::find($id)->delete();
-    return response('', 200);
-});
-
-$app->patch('user/{id}', function(Request $request, $id) {
-    $user = User::find($id);
-    $user->email = $request->input('email');
-
-    $user->save();
-    return response()->json($user);
-});
-
-$app->run($app['request']);
+$request = Illuminate\Http\Request::capture();
+$app->run($request);

@@ -1,26 +1,25 @@
-web:
-  build: .
-  volumes:
-    # This is a link from your docker-host where your project lives.
-    # If you are on a mac/windows, it will need to be mapped properly to the docker VM
-    - ./public:/data/www/public
-  ports:
-    - 80:80
-  links:
-    - mysql
-  environment:
-    MYSQL_DATABASE: user_service
-    MYSQL_USER: user_mysql
-    MYSQL_PASSWORD: user_@123mysql
-
-mysql:
-  image: mysql:5.7
-  environment:
-    MYSQL_ROOT_PASSWORD: root
-    MYSQL_DATABASE: user_service
-    MYSQL_USER: user_mysql
-    MYSQL_PASSWORD: user_@123mysql
-    ports:
-      3306:3306
-  volumes:
-      - ./db:/data/www/db
+version: '2'
+services:
+    nginx:
+        build: .
+        container_name: nginx-php7
+        ports:
+            - "80:80"
+        volumes:
+            - ./public:/data/www/public
+        working_dir: /data/www/public
+        links:
+            - mysql
+        environment:
+           - MYSQL_DATABASE=user_service
+           - MYSQL_USER=user_mysql
+           - MYSQL_PASSWORD=user_@123mysql
+    mysql:
+      image: mysql:5.6.26
+      environment:
+       - MYSQL_ROOT_PASSWORD=root
+       - MYSQL_DATABASE=user_service
+       - MYSQL_USER=user_mysql
+       - MYSQL_PASSWORD=user_@123mysql
+      ports:
+        - "3306:3306"
