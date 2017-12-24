@@ -4,7 +4,7 @@ services:
         build: .
         container_name: nginx-php7
         ports:
-            - "80:80"
+            - "8081:80"
         volumes:
             - ./public:/data/www/public
         working_dir: /data/www/public
@@ -15,11 +15,11 @@ services:
            - MYSQL_USER=user_mysql
            - MYSQL_PASSWORD=user_@123mysql
     mysql:
-      image: mysql:5.6.26
-      environment:
-       - MYSQL_ROOT_PASSWORD=root
-       - MYSQL_DATABASE=user_service
-       - MYSQL_USER=user_mysql
-       - MYSQL_PASSWORD=user_@123mysql
-      ports:
-        - "3306:3306"
+        image: mysql:5.6.26
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+          - MYSQL_DATABASE=user_service
+          - MYSQL_USER=user_mysql
+          - MYSQL_PASSWORD=user_@123mysql
+        expose:
+          - "3306"

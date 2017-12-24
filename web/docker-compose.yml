@@ -1,0 +1,10 @@
+version: '2'
+services:
+    nginx:
+        build: .
+        container_name: web-nginx-php7
+        ports:
+            - "80:80"
+        volumes:
+            - ./public:/data/www/public
+        working_dir: /data/www/public

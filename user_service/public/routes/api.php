@@ -9,8 +9,8 @@
 use Illuminate\Http\Request;
 
 $router->post('login', 'UserController@login');
-$router->post('logout', 'Auth\LoginController@logout');
-$router->post('register', 'Auth\RegisterController@register');
+$router->post('logout', 'UserController@logout');
+$router->post('register', 'UserController@register');
 
 $router->group(['middleware' => 'auth', 'prefix' => 'api/'], function() use ($router) {
     $router->get('user', function (Request $request) {
