@@ -15,10 +15,11 @@ class UserAuth
      */
     public function handle($request, Closure $next)
     {
-        if (false) {
+        if ($request->session()->has('api_token')) {
             return redirect('/home');
         } else {
-            return redirect('/register');
+            return redirect('/login');
+//            return redirect('/register');
         }
     }
 }

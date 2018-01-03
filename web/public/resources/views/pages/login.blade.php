@@ -12,7 +12,7 @@
         <div class="logo">login</div>
         <!-- Main Form -->
         <div class="login-form-1">
-            <form id="login-form" class="text-left">
+            {{ Form::open(array('url' => 'login', 'method' => 'post')) }}
                 <div class="login-form-main-message"></div>
                 <div class="main-login-form">
                     <div class="login-group">
@@ -30,9 +30,26 @@
                 <div class="etc-login-form">
                     <p>new user? <a href="#">create new account</a></p>
                 </div>
-            </form>
+            {{ Form::close() }}
         </div>
         <!-- end:Main Form -->
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if ( isset($responseException))
+            <div class="alert alert-danger">
+                <ul>
+                        <li>{{ $responseException['message'] }}</li>
+                </ul>
+            </div>
+        @endif
     </div>
 
 @stop

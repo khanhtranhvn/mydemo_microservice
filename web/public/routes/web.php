@@ -19,5 +19,11 @@ Route::get('/register', function () {
     return view('pages.register');
 });
 
+Route::get('/login', function () {
+    return view('pages.login');
+});
+
 //Route::post('/register', ['before' => 'csrf', 'UserController@register']);
 Route::post('/register', 'UserController@register');
+Route::post('/logout', 'UserController@logout');
+Route::post('/login', 'UserController@login');

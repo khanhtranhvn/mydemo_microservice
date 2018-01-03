@@ -36,9 +36,10 @@ class UserController extends Controller
         return $this->jsonData(null, 2, 401, 'The email or password is incorrect!');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        $user = Auth::user();
+//        $user = Auth::user();
+        $user = User::where('api_token', $request->input('api_token'))->first();
         if (!empty($user)) {
             $user->api_token = null;
             $user->save();
