@@ -9,25 +9,7 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-//        $this->validate($request, [
-//            'reg_email' => 'required',
-//            'reg_password' => 'required',
-//            'reg_password_confirm' => 'required'
-//        ]);
-
-//        $ch = curl_init();
-//        curl_setopt($ch, CURLOPT_URL, 'http://192.168.99.100:8081/register');
-//        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, ['email' =>  'khanh.tranvn90@gmail.com','password'=>'123123']);
-//        $html = curl_exec($ch);
-//        echo $html;
-//        var_dump($html);
-//exit;
-//        $client = new \GuzzleHttp\Client();
         $client = new \GuzzleHttp\Client();
-//        $response = $client->request('POST', 'register');
-//        $response = $client->get('127.0.0.1:8081/register');
         $response = $client->post(
             'http://192.168.99.100:8081/login',
             [
@@ -37,20 +19,23 @@ class UserController extends Controller
                 ]
             ]
         );
-        echo $response->getStatusCode(); // 200
-        echo $response->getBody(); // { "type": "User", ....
+        echo $response->getStatusCode();
+        echo $response->getBody();
 
     }
 
     public function logout() {
         $client = new \GuzzleHttp\Client();
-//        $response = $client->request('POST', 'register');
-//        $response = $client->get('127.0.0.1:8081/register');
         $response = $client->post(
             'http://192.168.99.100:8081/logout'
         );
-        echo $response->getStatusCode(); // 200
-        echo $response->getBody(); // { "type": "User", ....
+        if ( $response->getStatusCode() == 200 ) {
+            $request = \Request();
+            $request->session()->forget('api_token');
+            $request->session()->flush();
+            return redirect('/');
+        }
+
     }
 
     public function logIn ( Request $request ) {
@@ -75,15 +60,31 @@ class UserController extends Controller
 
             $responseBody =  $response->getBody();
             $responseArr = \GuzzleHttp\json_decode($responseBody->getContents(), true);
-            var_dump($responseArr['api_token']); exit;
-            $request->session()->put('api_token', $responseArr['api_token']);
-            return redirect()->route('/');
+            $request->session()->put('api_token', $responseArr['data']['api_token']);
+            return redirect('/');
         } catch (\Exception $exception) {
-            var_dump($exception); exit;
             $responseException = $exception->getResponse()->getBody(true);
             return view('pages.login', [
                 'responseException' => json_decode($responseException->getContents(),true)
             ] );
+        }
+    }
+
+    public function getTodoList() {
+        if ( \Request::session()->has('api_token') ) {
+            $apiToken = \Request::session()->get('api_token');
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get(
+                'http://192.168.99.100:8081/getToDoList',
+                [
+                    'form_params' => [
+                        'api_token' =>  $apiToken
+                    ]
+                ]
+            );
+            var_dump($response);exit;
+        } else {
+            return redirect('/login');
         }
     }
 }

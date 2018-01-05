@@ -12,7 +12,8 @@
 */
 
 Route::group(['middleware' => 'user-auth'], function () {
-    Route::get('/');
+    Route::get('/', 'UserController@getTodoList');
+    Route::get('/logout', 'UserController@logout');
 });
 
 Route::get('/register', function () {
@@ -25,5 +26,4 @@ Route::get('/login', function () {
 
 //Route::post('/register', ['before' => 'csrf', 'UserController@register']);
 Route::post('/register', 'UserController@register');
-Route::post('/logout', 'UserController@logout');
 Route::post('/login', 'UserController@login');
